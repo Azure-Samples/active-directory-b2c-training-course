@@ -217,6 +217,16 @@
 					</OutputClaims>
 					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
 				</TechnicalProfile>
+							
+				<!-- 
+					Here we are adding a new validation profile to SelfAsserted-ProfileUpdate which ensures
+					that the technical profile above which validates the store membership number is run.
+				-->	
+				<TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+					<ValidationTechnicalProfiles>
+						<ValidationTechnicalProfile ReferenceId="ValidateStoreMembershipNumber" />
+					</ValidationTechnicalProfiles>
+				</TechnicalProfile>
 			</TechnicalProfiles>
 		</ClaimsProvider>
 
