@@ -1,0 +1,373 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="aadb2ctraining.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://aadb2ctraining.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+
+	<BasePolicy>
+		<TenantId>aadb2ctraining.onmicrosoft.com</TenantId>
+		<PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+	</BasePolicy>
+	<BuildingBlocks>
+		<!-- 
+			MODULE 5 and 6 
+		-->
+		<ClaimsSchema>
+			<!-- Define a new claim of extension_storeMembershipNumber to store the membership number of the user. -->
+			<ClaimType Id="extension_storeMembershipNumber">
+				<DisplayName>Store Membership Number</DisplayName>
+				<DataType>string</DataType>
+				<UserHelpText>Your store membership number</UserHelpText>
+				<UserInputType>TextBox</UserInputType>
+			</ClaimType>
+
+			<!-- Define a new claim of extension_storeMembershipNumber to store the membership date of the user. -->
+			<ClaimType Id="extension_storeMembershipDate">
+				<DisplayName>Store Membership Date</DisplayName>
+				<DataType>string</DataType>
+				<UserHelpText>Your store membership date</UserHelpText>
+				<UserInputType>TextBox</UserInputType>
+			</ClaimType>
+
+			<!-- Define a new claim of extension_TermsOfServiceConsented to store the users consent to terms of service. -->
+			<ClaimType Id="extension_TermsOfServiceConsented">
+				<DisplayName>Terms of Service Consented</DisplayName>
+				<DataType>string</DataType>
+				<UserHelpText>I am agreeing to the Awesome Computers terms of service.</UserHelpText>
+				<UserInputType>CheckboxMultiSelect</UserInputType>
+				<Restriction>
+					<Enumeration Text="I am agreeing to the Awesome Computers terms of service." Value="4/19/2018" SelectByDefault="false" />
+				</Restriction>
+			</ClaimType>
+		</ClaimsSchema>
+	</BuildingBlocks>
+
+	<ClaimsProviders>
+		<!-- 
+			MODULE 2
+			=========================================
+			Here we're going to add a new claims provider for facebook.
+			Make sure to update the client_id with the client_id you retrieved from facebook!
+			More info here: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-setup-fb-app
+		-->
+		<ClaimsProvider>
+			<DisplayName>Facebook</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="Facebook-OAUTH">
+					<Metadata>
+						<Item Key="client_id">367364033750147</Item>
+						<Item Key="scope">email public_profile</Item>
+						<Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+					</Metadata>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+		<ClaimsProvider>
+			<DisplayName>Local Account SignIn</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="login-NonInteractive">
+					<Metadata>
+						<Item Key="client_id">c5f2f442-6750-448f-9855-92d8e1d496f1</Item>
+						<Item Key="IdTokenAudience">d210459f-f186-4b9a-ac63-a4b20645b0d3</Item>
+					</Metadata>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="c5f2f442-6750-448f-9855-92d8e1d496f1" />
+						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="d210459f-f186-4b9a-ac63-a4b20645b0d3" />
+					</InputClaims>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+		<!-- 
+			MODULE 2
+			=========================================
+			Here we're going to add a new claims provider for Azure Active Directory.
+			Make sure to update the METADATA with the proper information.
+			More info here: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-setup-aad-custom 
+		-->
+		<ClaimsProvider>
+			<Domain>Corporate</Domain>
+			<DisplayName>Login using corporate account</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="CorporateProfile">
+					<DisplayName>Corporate User</DisplayName>
+					<Description>Login with your corporate account</Description>
+					<Protocol Name="OpenIdConnect"/>
+					<OutputTokenFormat>JWT</OutputTokenFormat>
+					<Metadata>
+						<Item Key="METADATA">https://login.windows.net/aadb2ctraining.onmicrosoft.com/.well-known/openid-configuration</Item>
+						<Item Key="ProviderName">https://sts.windows.net/4ba38890-d941-471a-b8cd-e5df2769070c/</Item>
+						<Item Key="client_id">b8bfabee-32cd-4893-a519-993ce9c9315a</Item>
+						<Item Key="IdTokenAudience">b8bfabee-32cd-4893-a519-993ce9c9315a</Item>
+						<Item Key="response_types">id_token</Item>
+						<Item Key="UsePolicyInRedirectUri">false</Item>
+					</Metadata>
+					<CryptographicKeys>
+						<Key Id="client_secret" StorageReferenceId="B2C_1A_aadb2ctraining"/>
+					</CryptographicKeys>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="oid"/>
+						<OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid"/>
+						<OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+						<OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+						<OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+						<OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="contosoAuthentication" />
+						<OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="AzureADContoso" />
+					</OutputClaims>
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/>
+						<OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/>
+						<OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/>
+						<OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/>
+					</OutputClaimsTransformations>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>	
+
+		<!-- 
+			MODULE 5 and 6
+			=========================================
+			Here we're going to add a new claims provider for our store membership API.
+		-->
+		<ClaimsProvider>
+			<DisplayName>REST APIs</DisplayName>
+			<TechnicalProfiles>
+				<!--
+					MODULE 5
+					More info here: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-rest-api-validation-custom
+				-->
+				<TechnicalProfile Id="ValidateStoreMembershipNumber">
+					<DisplayName>Validate Store Membership Number</DisplayName>
+					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+					<Metadata>
+						<!--
+							This is pretty straightforward, in ServiceUrl we set the URL our API is bound to for 
+							membership number validation. We also configure the request to be made using BASIC authentication,
+							with the username and password defined in policy keys (set in the CryptographicKeys element below).
+						-->
+						<Item Key="ServiceUrl">https://storemembershipapi.azurewebsites.net/api/membership/validate</Item>
+						<Item Key="AuthenticationType">Basic</Item>
+						<Item Key="SendClaimsIn">Body</Item>
+					</Metadata>
+					<CryptographicKeys>
+						<Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_B2cRestClientId" />
+						<Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_B2cRestClientSecret" />
+					</CryptographicKeys>
+					<InputClaims>
+						<!-- 
+							We use extension_storeMembershipNumber as the input claim reference id. This tells the system to pull
+							the value of this claim and use it to send to the API. We define a PaztnerClaimType of storeMembershipNumber
+							(note the lack of extension_ prefix). This is the variable that the extension_storeMembershipNumber value is 
+							sent to the API as.							
+						-->
+						<InputClaim ClaimTypeReferenceId="extension_storeMembershipNumber" PartnerClaimType="storeMembershipNumber" />
+					</InputClaims>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+				</TechnicalProfile>
+
+				<!--
+					MODULE 5
+					More info here: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-rest-api-validation-custom
+				-->
+				<TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+					<!-- 
+						This is basically the same idea as the input claim defined above. The API calls the memberhsip number
+						'storeMembershipNumber', but we want to output the claim as extension_storeMembershipNumber which
+						is what we've previously defined the claim as.
+					-->
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="extension_storeMembershipNumber" PartnerClaimType="storeMembershipNumber" />
+					</OutputClaims>
+					<ValidationTechnicalProfiles>
+						<!-- 
+							Here we are adding a new validation profile to LocalAccountSignUpWithLogonEmail which ensures
+							that the technical profile above which validates the store membership number is run.
+						-->
+						<ValidationTechnicalProfile ReferenceId="ValidateStoreMembershipNumber" />
+					</ValidationTechnicalProfiles>
+				</TechnicalProfile>
+
+				<!--
+					MODULE 6
+					More info here: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-rest-api-step-custom
+				-->
+				<TechnicalProfile Id="ObtainStoreMembershipDate">
+					<DisplayName>Obtain Store Membership Date</DisplayName>
+					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+					<Metadata>
+						<Item Key="ServiceUrl">https://storemembershipapi.azurewebsites.net/api/membership/membershipdate</Item>
+						<Item Key="AuthenticationType">Basic</Item>
+						<Item Key="SendClaimsIn">Body</Item>
+					</Metadata>
+					<CryptographicKeys>
+						<Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_B2cRestClientId" />
+						<Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_B2cRestClientSecret" />
+					</CryptographicKeys>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="extension_storeMembershipNumber" PartnerClaimType="storeMembershipNumber" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="extension_storeMembershipDate" PartnerClaimType="storeMembershipDate" />
+					</OutputClaims>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+	</ClaimsProviders>
+
+	<UserJourneys>		
+		<!--
+			MODULE 2
+			=========================================
+			Here we've customized the base SignUpOrSignIn user journey to include two new exchanges,
+				CorporateExchange - AAD 
+				Facebook Exchange - Facebook.
+			This adds the buttons to the sign in screen to allow users to sign in with both new IDPs.
+		--> 
+		<UserJourney Id="SignUpOrSignInUsingCorporate">
+			<OrchestrationSteps>
+				<OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+					<ClaimsProviderSelections>
+						<!-- Added the exchanges to ClaimsProviderSelections -->
+						<ClaimsProviderSelection TargetClaimsExchangeId="CorporateExchange" />
+						<ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+						<ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+					</ClaimsProviderSelections>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<!-- Check if the user has selected to sign in using one of the social providers -->
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<!-- Added the exchanges to ClaimsExchanges -->
+						<ClaimsExchange Id="CorporateExchange" TechnicalProfileReferenceId="CorporateProfile" />
+						<ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+						<ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<!-- For social IDP authentication, attempt to find the user account in the directory. -->
+				<OrchestrationStep Order="3" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>localAccountAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+				<OrchestrationStep Order="4" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+				<OrchestrationStep Order="5" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>socialIdpAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+				<OrchestrationStep Order="6" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+
+		<!--
+			MODULE 6
+			=========================================
+			Here we've customized the base ProfileEdit user journey to add a new OrchestrationStep (Order="5")
+			to obtain additional claims from our API. In this case we're passing the storeMembershipNumber and
+			getting back and persisting a store membership date (the day we registered with the store).
+		--> 
+		<UserJourney Id="ProfileEditObtainApiClaim">
+			<OrchestrationSteps>		  
+				<OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+					<ClaimsProviderSelections>
+						<ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+					</ClaimsProviderSelections>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="3" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>socialIdpAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="4" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="5" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="GetStoreMembershipDateData" TechnicalProfileReferenceId="ObtainStoreMembershipDate" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+	</UserJourneys>
+
+</TrustFrameworkPolicy>

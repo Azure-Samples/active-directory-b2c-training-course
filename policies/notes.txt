@@ -1,0 +1,22 @@
+TRAINING:
+https://aadb2ctraining.azurewebsites.net
+
+MODULE 1:
+https://aadb2cmodule1.azurewebsites.net
+https://login.microsoftonline.com/aadb2ctraining.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_SignInSignUp&client_id=b8aa71f6-fa3d-45e2-9454-7e85a983aa89&nonce=defaultNonce&redirect_uri=https%3A%2F%2Flocalhost%3A44316&scope=openid&response_type=id_token&prompt=login
+Add link to go back to b2c training
+Make it a little prettier, add image
+
+MODULE 2: 
+https://aadb2cmodule2.azurewebsites.net
+https://login.microsoftonline.com/aadb2ctraining.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_Module2SignupSignin&client_id=b8aa71f6-fa3d-45e2-9454-7e85a983aa89&nonce=defaultNonce&redirect_uri=https%3A%2F%2Flocalhost%3A44316&scope=openid&response_type=id_token&prompt=login
+
+MODULE 3:
+
+
+MODULE 4: 
+https://login.microsoftonline.com/aadb2ctraining.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_Module4SignupSigninCustomized&client_id=b8aa71f6-fa3d-45e2-9454-7e85a983aa89&nonce=defaultNonce&redirect_uri=https%3A%2F%2Faadb2cmodule1.azurewebsites.net&scope=openid&response_type=id_token&prompt=login
+Modify all tenant branding options
+
+MODULE 5: 
+building block has datetime stamp sample

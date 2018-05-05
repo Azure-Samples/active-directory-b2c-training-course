@@ -1,0 +1,16 @@
+Salesforce
+===================================================================================
+Username: aadb2ctraining@gmail.com
+Email: aadb2ctraining@gmail.com
+Password: 6Rk4mCYT2Z
+Security Question: In what city were you born?
+Answer: Redmond
+Metadata Discovery Endpoint: https://b2ctraining-dev-ed.my.salesforce.com/.well-known/samlidp/Awesome_Computers.xml
+Certificate password: 8&HsQ<
+
+Google
+===================================================================================
+Username: aadb2ctraining@gmail.com
+Password: 6Rk4mCYT2Z
+Client id: 376020570008-aa4ou70429ritt4ir9pb3up0qvoi5tct.apps.googleusercontent.com
+Client secret: Nvm7pqK2P7KaQB6WoemPeSJY

@@ -1,0 +1,52 @@
+{
+  "Users": [
+    {
+      "accountEnabled": true,
+      "displayName": "AAA BBB",
+      "userPrincipalName" : "aabb@jscmtenant.onmicrosoft.com",
+      "passwordProfile": {
+        "password": "Test1234",
+        "forceChangePasswordNextLogin": false
+      },
+      "mailNickname" : "aabb",
+      "userIdentities": [
+        {
+          "issuer": "facebook.com",
+          "issuerUserId": "MATxTNg5MzYyMzMyMNY1Njc="
+        }
+      ]
+    },
+    {
+      "accountEnabled": true,
+      "displayName": "CCC DDD",
+      "userPrincipalName" : "ccdd@jscmtenant.onmicrosoft.com",
+      "passwordProfile": {
+        "password": "Test1234",
+        "forceChangePasswordNextLogin": false
+      },
+      "mailNickname" : "ccdd",
+      "userIdentities": [
+        {
+          "issuer": "facebook.com",
+          "issuerUserId": "NATxTNg5MzYyMzMyMNY1Njc="
+        }
+      ]
+    },
+    {
+      "accountEnabled": true,
+      "displayName": "EEE FFF",
+      "userPrincipalName" : "eeff@jscmtenant.onmicrosoft.com",
+      "passwordProfile": {
+        "password": "Test1234",
+        "forceChangePasswordNextLogin": false
+      },
+      "mailNickname" : "eeff",
+      "userIdentities": [
+        {
+          "issuer": "facebook.com",
+          "issuerUserId": "OATxTNg5MzYyMzMyMNY1Njc="
+        }
+      ]
+    }
+  ]
+}

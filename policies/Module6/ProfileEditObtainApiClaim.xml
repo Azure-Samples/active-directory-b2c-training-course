@@ -1,0 +1,54 @@
+<TrustFrameworkPolicy 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+	PolicySchemaVersion="0.3.0.0" 
+	TenantId="aadb2ctraining.onmicrosoft.com" 
+	TenantObjectId="4ba38890-d941-471a-b8cd-e5df2769070c" 
+	PolicyId="B2C_1A_ProfileEditObtainApiClaim" 
+	PublicPolicyUri="http://aadb2ctraining.onmicrosoft.com/"
+	DeploymentMode="Development"
+	UserJourneyRecorderEndpoint="https://aadb2crecorder.azurewebsites.net/stream?id=3141001b-8755-4d0c-babe-4614dce8e103">
+  <BasePolicy>
+    <TenantId>aadb2ctraining.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ContentDefinitions>
+		<ContentDefinition Id="api.selfasserted">
+		  <LoadUri>https://aadb2ctraining.blob.core.windows.net/aadb2ctraining/unified.html</LoadUri>
+		</ContentDefinition>
+		<ContentDefinition Id="api.signuporsignin">
+		  <LoadUri>https://aadb2ctraining.blob.core.windows.net/aadb2ctraining/unified.html</LoadUri>
+		</ContentDefinition>
+		<ContentDefinition Id="api.selfasserted.profileupdate">
+		  <LoadUri>https://aadb2ctraining.blob.core.windows.net/aadb2ctraining/unified.html</LoadUri>
+		</ContentDefinition>
+		<ContentDefinition Id="api.localaccountsignup">
+		  <LoadUri>https://aadb2ctraining.blob.core.windows.net/aadb2ctraining/unified.html</LoadUri>
+		</ContentDefinition>
+		<ContentDefinition Id="api.localaccountpasswordreset">
+		  <LoadUri>https://aadb2ctraining.blob.core.windows.net/aadb2ctraining/unified.html</LoadUri>
+		</ContentDefinition>
+    </ContentDefinitions>
+  </BuildingBlocks>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="ProfileEditObtainApiClaim" />
+	<UserJourneyBehaviors>
+      <SingleSignOn Scope="Application" />
+      <SessionExpiryType>Rolling</SessionExpiryType>
+      <SessionExpiryInSeconds>86400</SessionExpiryInSeconds>
+      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="3d358632-8f5e-411d-ba8b-486e666880b7" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+		<OutputClaim ClaimTypeReferenceId="extension_storeMembershipNumber" />
+		<OutputClaim ClaimTypeReferenceId="extension_storeMembershipDate" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
